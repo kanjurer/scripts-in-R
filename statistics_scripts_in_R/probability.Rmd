@@ -1,0 +1,94 @@
+---
+title: "Probability"
+date: "`01-16-2023`"
+output:
+  html_document:
+    theme: default
+    highlight: textmate
+    toc: yes
+    toc_float: yes
+    fig_width: 9.67
+    fig_height: 6
+    fig_caption: yes
+  pdf_document:
+    toc: yes
+---
+
+# Important Note
+To clear the workspace, use the command below:
+```{r}
+rm(list=ls())
+```
+
+
+# Statistic Summary
+```{r}
+mu <- 3 # set the mean
+sigma <- 2 # set the standard deviation
+```
+
+
+# Normal Distribution
+
+## Area (pnorm)
+Calculate the area under the normal distribution graph which is equivalent to finding the p-value
+```{r}
+# calculating areas (i.e. looking up p-values)
+# for the N(mu,sigma), i.e. normal dist with mean=mu and std dev=sigma, look up area to the right of X=z (upper tail)
+mu <- 0
+sigma <- 1
+z <- 2
+isLowerTail <- FALSE
+pnorm(z,mean=mu,sd=sigma,lower.tail=isLowerTail)
+```
+## Critical Values (qnorm)
+If area is known and we need to find the critical value for which the area to the left or right of it is equal to given area
+```{r}
+# finding critical values 
+# for the N(mu,sigma), i.e. normal dist with mean=mu and std dev=sigma
+# look up the value of X where the area to the right (the upper tail area) is "area"
+mu <- 0
+sigma <- 1
+area <- 2
+isLowerTail <- FALSE
+
+qnorm(area, mean=mu, sd=sigma, lower.tail=isLowerTail)
+```
+
+
+
+# Student-t Distribution
+
+## Area (pt)
+Calculate the area under the student-t distribution
+```{r}
+# calculating areas (i.e. looking up p-values)
+# for the t(dof) distribution, look up area to the left of X=t (lower tail)
+
+dof <- 5
+t <- 1
+isLowerTail = TRUE
+
+pt(t,df=dof,lower.tail=isLowerTail)
+```
+
+## Critical value (qt)
+```{r}
+# finding critical values 
+# for the t(dof) distribution, look up the value of X where the area to the right (upper tail area) is "area"
+
+dof <- 5
+area <- 0.1
+isLowerTail = FALSE
+
+qt(area, df=dof, lower.tail=isLowerTail)
+```
+
+
+
+
+
+
+
+
+
