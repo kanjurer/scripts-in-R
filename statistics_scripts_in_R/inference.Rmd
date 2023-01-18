@@ -1,0 +1,70 @@
+---
+title: "Inference"
+date: "`01-18-2023`"
+output:
+  html_document:
+    theme: default
+    highlight: textmate
+    toc: yes
+    toc_float: yes
+    fig_width: 9.67
+    fig_height: 6
+    fig_caption: yes
+  pdf_document:
+    toc: yes
+---
+
+# Inference statistics
+Idea is to derive inferences from the given Data
+
+# Important Note
+To clear the workspace, use the command below:
+```{r}
+rm(list=ls())
+```
+
+# Statistic Summary
+```{r}
+x <- c(2.5, 3, 2, 6, 4.1, 3.3) # data set
+
+n <- length(x) # number of data points
+xbar <- mean(x) # sample mean
+s <- sd(x) # sample std dev
+se <- s/sqrt(n) # sample standard error
+```
+
+# t-distribution
+We use Student t-distribution when the population variance is unknown, which is most often the case
+
+## Confidence Intervals
+
+
+```{r}
+confidence_level <- 0.95 # 95%
+alpha <- 1 - confidence_level
+df <- n - 1
+tstar <- qt(alpha/2, df=df, lower.tail = FALSE) # critical value
+# note, we put alpha/2 in above formula as we are finding the confidence interval which is two-tailed
+
+
+me <- tstar * se # margin of error
+lowerbound <- xbar - me
+upperbound <- xbar + me
+```
+
+
+## Hypothesis Testing
+
+```{r}
+# Null Hypothesis, H_0
+mu0 <- 0
+
+# Alternate Hypothesis, H_a
+isLessThan_mu0 = TRUE
+
+# Test Statistic, t_obs
+t_obs <- (xbar - mu0) / se
+
+# P-value
+pval <- pt(t_obs, df=df, lower.tail=isLessThan_mu0) # looks up the p-value using this
+```
