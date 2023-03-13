@@ -1,0 +1,86 @@
+---
+title: "Linear Regression"
+date: "`03-13-2023`"
+output:
+  html_document:
+    theme: default
+    highlight: textmate
+    toc: yes
+    toc_float: yes
+    fig_width: 9.67
+    fig_height: 6
+    fig_caption: yes
+  pdf_document:
+    toc: yes
+---
+
+
+# Important Note
+To clear the workspace, use the command below:
+```{r}
+rm(list = ls())
+```
+
+# Data
+
+```{r}
+N <- 10000 # nolint
+error_sd <- 10
+x_data <- 1:N # non-random variable (explanatory variable)
+error_data <- rnorm(N, mean = 0, sd = error_sd) # random variable and constant variance #nolint
+b_0 <- 1 # intercept
+b_1 <- 10 # slope
+y_data <- b_0 + b_1 * x_data + error_data # response variable (Random variable)
+
+y_bar <- mean(y_data)
+x_bar <- mean(x_data)
+
+data <- data.frame(cbind(x_data, y_data))
+```
+
+# Linear Regression
+```{r}
+# ydata ~ xdata means (ydata = b_0 + b_1 * xdata)
+fit <- lm(y_data ~ x_data, data = data)
+summary(fit)
+```
+
+## Hand Calculations
+
+```{r}
+pearson_corr <- cor(x_data, y_data, method = "pearson")
+spearman_corr <- cor(x_data, y_data, method = "spearman")
+b_1_estimator <- pearson_corr * sd(y_data) / sd(x_data)
+b_0_estimator <- y_bar - x_bar * b_1_estimator
+
+print(b_0_estimator)
+print(b_1_estimator)
+print(pearson_corr)
+print(pearson_corr ^ 2)
+print(spearman_corr)
+```
+
+# Plots
+
+## X-Y Scatter plot
+```{r}
+plot(x_data, y_data)
+```
+
+## X-Error Scatter plot
+```{r}
+plot(x_data, error_data)
+```
+
+## Errors histogram
+
+```{r}
+hist(error_data) # must be a bell shape centered around 0
+```
+
+## errors QQ - plot
+```{r}
+# straight line if our errors are normally distributed with constant variance
+qqnorm(error_data)
+qqline(error_data)
+```
