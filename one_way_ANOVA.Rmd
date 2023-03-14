@@ -1,0 +1,129 @@
+---
+title: "One Way ANOVA"
+date: "`02-24-2023`"
+output:
+  html_document:
+    theme: default
+    highlight: textmate
+    toc: yes
+    toc_float: yes
+    fig_width: 9.67
+    fig_height: 6
+    fig_caption: yes
+  pdf_document:
+    toc: yes
+---
+
+# One-way ANOVA
+ANOVA test is used to compare multiple samples and derive inferences about their respective populations
+
+# Assumptions
+- Population variances are equal
+- Populations are normal
+
+# Important Note
+To clear the workspace, use the command below:
+```{r}
+rm(list = ls())
+```
+
+# Summary Statistics
+
+```{r}
+###################
+# DATA (4 rat diets labelled A,B,C,D; note different sample sizes per group)
+A <- c(251.2, 245.1, 248.0, 251.1, 260.5)
+B <- c(263.2, 262.9, 265, 254.5,264.3)
+C <- c(269.7, 263.2,277.5,267.4,270.5)
+
+group_datas <- list(A, B, C)
+
+################
+# Summary Stats
+
+# size of each group
+group_sizes <- unlist(lapply(group_datas, length))
+
+# mean of each group
+group_means <- unlist(lapply(group_datas, mean))
+
+# std dev of each group
+group_sds <- unlist(lapply(group_datas, sd))
+
+
+# Standard error of each group
+group_sdes <- unlist(lapply(group_datas, sd))
+
+# grand mean and grad std dev
+supergroup <- unlist(group_datas)
+grandmean <- mean(supergroup)
+grand_sd <- sd(supergroup)
+
+# group size
+a <- length(group_datas)
+N <- sum(group_sizes)
+```
+
+
+
+# Built-in ANOVA in R
+
+```{r}
+# assign group coding to data (used for built in ANOVAs in most software)
+x <- supergroup # combine all the data in one column
+ranks <- 1: length(group_datas)
+group <- c(rep(ranks, group_sizes))
+
+# assign index (1,2,3,4) to each group/diet)
+
+# MD comment: this is the typical arrangement required for ANOVA with statisitcal software
+
+# there are now 2 columns. first column is group index; second column is the data
+
+# BUILT-IN ANOVA function in R
+data <- data.frame(x = x, group = factor(group)) # make a data frame
+fit <- lm(x ~ group, data) # fit the ANOVA using lm function
+anova(fit) # create the ANOVA table
+```
+
+# Long Hand ANOVA Calculations
+
+```{r}
+# Sums of Squares
+SST <- (N - 1) * (grand_sd ^ 2)
+print(SST)
+
+SSTr <- sum(group_sizes * (group_means - grandmean) ^ 2)
+print(SSTr) # treatment sum of squares
+
+SSE <- sum((group_sizes - 1) * (group_sds)^2)
+print(SSE) # error sum of squares
+
+# Mean Square
+MSTr <- SSTr / (a - 1) # mean square treatment
+print(MSTr)
+
+MSE <- SSE / (N - a) # mean square error
+print(MSE)
+```
+
+# Hypothesis Testing
+```{r}
+
+# Null hypothesis      : mu_1 = mu_2 = ... = mu_n
+# Alternate hypothesis : at least one of group means are different
+
+# Test Statistic
+Fobs <- MSTr / MSE # test statistic
+print(Fobs)
+
+# look up P-value (verify with table)
+pvalue <- pf(Fobs ,a - 1, N - a, lower.tail=FALSE) # determine the P-value using F distribution
+print(pvalue)
+```
+
+# Data Scatter plot
+```{r}
+plot(group, x, pch=19, cex=1.5, main="data scatter plot", ylab="response", xaxt='n')
+axis(1, at = ranks, labels = c("A", "B", "C"))
+```
