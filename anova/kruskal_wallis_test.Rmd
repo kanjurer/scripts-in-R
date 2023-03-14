@@ -1,0 +1,74 @@
+---
+title: "Kruskal Wallis Test"
+date: "`02-24-2023`"
+output:
+  html_document:
+    theme: default
+    highlight: textmate
+    toc: yes
+    toc_float: yes
+    fig_width: 9.67
+    fig_height: 6
+    fig_caption: yes
+  pdf_document:
+    toc: yes
+---
+
+
+
+ # Important Note
+To clear the workspace, use the command below:
+```{r}
+rm(list = ls())
+```
+
+# Summary
+```{r}
+A <- c(251.2, 245.1, 248.0, 251.1, 260.5)
+B <- c(263.2, 262.9, 265, 254.5, 264.3)
+C <- c(269.7, 263.2, 277.5, 267.4, 270.5)
+
+group_datas <- list(A, B, C)
+
+
+
+# size of each group
+group_sizes <- unlist(lapply(group_datas, length))
+N <- sum(group_sizes)
+
+# number of groups
+a <- length(group_datas)
+
+# degrees of freedom for this test
+df <- a - 1
+
+# grouping
+supergroup <- unlist(group_datas)
+groupings <- rep(seq(length(group_datas)), group_sizes)
+
+# putting ranks to match the list
+group_datas_ranked <- split(rank(supergroup), groupings)
+group_rank_means <- unlist(lapply(group_datas_ranked, mean))
+
+
+```
+
+# Kruskal Wallis Test
+```{r}
+kruskal <- kruskal.test(supergroup ~ groupings)
+kruskal
+```
+
+# Long Hand Calculations
+```{r}
+# Null hypothesis      : mu_1 = mu_2 = ... = mu_n
+# Alternate hypothesis : at least one of group means are different
+
+# test statistic
+K <- sum((12 / (N * (N + 1))) * (group_sizes * ((group_rank_means - (N + 1) / 2)^2)))
+K
+
+# p-value = Pr(X^2 > K) [remember this is one sided (upper)]
+pval <- pchisq(abs(K), df, lower.tail = FALSE)
+pval
+```
