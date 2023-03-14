@@ -1,0 +1,73 @@
+---
+title: "Pooled T-test"
+date: "`01-20-2023`"
+output:
+  html_document:
+    theme: default
+    highlight: textmate
+    toc: yes
+    toc_float: yes
+    fig_width: 9.67
+    fig_height: 6
+    fig_caption: yes
+  pdf_document:
+    toc: yes
+---
+
+# Pooled t-test statistics
+Idea is to derive inferences from the given Data
+
+# Important Note
+To clear the workspace, use the command below:
+```{r}
+rm(list = ls())
+```
+
+# Statistic Summary
+```{r}
+group1 <- c(15.96,16.31,15.17,14.66,16.58,15.46,14.37,15.84,15.81,14.99,14.08,13.38,17.84)
+group2 <- c(16.84,13.57,12.03,15.10,12.72,12.46,13.99,13.86,15.97,12.23,12.97,16.48,14.25)
+
+
+n1 <- length(group1)
+n2 <- length(group2)
+xbar1 <- mean(group1)
+xbar2 <- mean(group2)
+s1 <- sd(group1)
+s2 <- sd(group2)
+xbard <- xbar1 - xbar2
+sp <- sqrt(((n1 - 1) * s1^2 + (n2 - 1) * s2^2 ) / (n1 + n2 - 2))
+se <- sp * sqrt((1 / n1) + (1 / n2))
+```
+
+# Pooled T-test
+
+## In-built 
+```{r}
+alpha <- 0.01
+alternative <- "two.sided" # "greater", "less", "two.sided"
+variances_are_equal <- TRUE
+is_paired <- FALSE
+
+# T-test
+t.test(group1, group2, paired = is_paired, var.equal =  variances_are_equal, alternative = alternative, conf.level = 1 - alpha)
+```
+
+## Long Hand Calculations
+```{r}
+# H0: mu1  = mu2
+# HA: mu1 != mu2
+
+# Test statistic
+tobs <- xbard / se
+tobs
+
+# pval
+df <- n1 + n2 - 2
+pval <-  pt(abs(tobs), df, lower.tail = FALSE) + pt(-abs(tobs), df, lower.tail = TRUE)
+pval
+
+# CI
+ci <- xbard + c(-1, 1) * qt(alpha / 2, df, lower.tail = FALSE) * se
+ci
+```
