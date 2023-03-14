@@ -17,7 +17,7 @@ output:
 # Important Note
 To clear the workspace, use the command below:
 ```{r}
-rm(list=ls())
+rm(list = ls())
 ```
 
 
@@ -34,25 +34,25 @@ sigma <- 2 # set the standard deviation
 Calculate the area under the normal distribution graph which is equivalent to finding the p-value
 ```{r}
 # calculating areas (i.e. looking up p-values)
-# for the N(mu,sigma), i.e. normal dist with mean=mu and std dev=sigma, look up area to the right of X=z (upper tail)
+# for the N(mu,sigma^2), i.e. normal dist with mean=mu and std dev=sigma, look up area to the right of X=z (upper tail)
 mu <- 0
 sigma <- 1
-z <- 2
+z <- 1.36108931
 isLowerTail <- FALSE
-pnorm(z,mean=mu,sd=sigma,lower.tail=isLowerTail)
+pnorm(z, mean = mu, sd = sigma, lower.tail = isLowerTail) * 2
 ```
 ## Critical Values (qnorm)
 If area is known and we need to find the critical value for which the area to the left or right of it is equal to given area
 ```{r}
 # finding critical values 
-# for the N(mu,sigma), i.e. normal dist with mean=mu and std dev=sigma
+# for the N(mu,sigma^2), i.e. normal dist with mean=mu and std dev=sigma
 # look up the value of X where the area to the right (the upper tail area) is "area"
 mu <- 0
 sigma <- 1
 area <- 2
-isLowerTail <- FALSE
+isLowerTail <- TRUE
 
-qnorm(area, mean=mu, sd=sigma, lower.tail=isLowerTail)
+qnorm(area, mean = mu, sd = sigma, lower.tail = isLowerTail)
 ```
 
 
@@ -67,21 +67,21 @@ Calculate the area under the student-t distribution
 
 dof <- 5
 t <- 1
-isLowerTail = TRUE
+isLowerTail <- TRUE
 
-pt(t,df=dof,lower.tail=isLowerTail)
+pt(t, df = dof, lower.tail = isLowerTail)
 ```
 
 ## Critical value (qt)
 ```{r}
-# finding critical values 
+# finding critical values
 # for the t(dof) distribution, look up the value of X where the area to the right (upper tail area) is "area"
 
 dof <- 5
 area <- 0.1
-isLowerTail = FALSE
+isLowerTail <- FALSE
 
-qt(area, df=dof, lower.tail=isLowerTail)
+qt(area, df = dof, lower.tail = isLowerTail)
 ```
 
 
