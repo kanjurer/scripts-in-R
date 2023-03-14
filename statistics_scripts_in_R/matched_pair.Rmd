@@ -1,0 +1,63 @@
+---
+title: "Matched Pair"
+date: "`01-20-2023`"
+output:
+  html_document:
+    theme: default
+    highlight: textmate
+    toc: yes
+    toc_float: yes
+    fig_width: 9.67
+    fig_height: 6
+    fig_caption: yes
+  pdf_document:
+    toc: yes
+---
+
+# Matched Pair statistics
+Idea is to derive inferences from the given Data
+
+# Important Note
+To clear the workspace, use the command below:
+```{r}
+rm(list = ls())
+```
+
+# Statistic Summary
+```{r}
+x <- c(12.27, 7.59, 5.37, 9.77, 6.36, 5.99, 8.18, 8.00, 11.02, 5.67, 6.72, 11.75, 8.55, 7.62, 10.87) # data set 1
+y <- c(9.89, 10.39, 8.76, 8.03, 10.78, 9.18, 7.61, 9.72, 9.67, 8.50, 7.20, 6.20, 12.59, 8.35, 8.69) # data set 2
+
+n <- length(x) # number of data points
+diff <- x - y # array of differences
+df <- n - 1
+se <- sd(diff) / sqrt(n)
+print(diff)
+```
+
+# T-Test
+
+## In-Built
+```{r}
+alpha <- 0.01
+alternative <- "two.sided" # "greater", "less", "two.sided" 
+t.test(diff, alternative = alternative, mu = 0, conf.level = 1 - alpha)
+```
+
+## Long Hand Calculations
+
+```{r}
+# H0 : xbar  = ybar
+# HA : xbar != ybar
+
+# Test statistic
+tobs <- mean(diff) / (se)
+tobs
+
+pval <- 2 * pt(abs(tobs), df, lower.tail = FALSE)
+pval
+
+#ci
+ci <- mean(diff) + c(-1, 1) * qt(alpha / 2, df, lower.tail = FALSE) * se
+ci
+```
