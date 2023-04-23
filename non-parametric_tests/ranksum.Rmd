@@ -1,0 +1,67 @@
+---
+title: "Ranksum"
+date: "`04-16-2023`"
+output:
+  html_document:
+    theme: default
+    highlight: textmate
+    toc: yes
+    toc_float: yes
+    fig_width: 9.67
+    fig_height: 6
+    fig_caption: yes
+  pdf_document:
+    toc: yes
+---
+
+# Matched Pair statistics
+Idea is to derive inferences from the given Data
+
+# Important Note
+To clear the workspace, use the command below:
+```{r}
+rm(list = ls())
+```
+
+# Statistic Summary
+```{r}
+x <- c(275, 300, 260, 300, 255, 275, 290, 300) # data set 1
+y <- c(260, 250, 175, 130, 200, 225, 240)  # data set 2
+
+n1 <- length(x)
+n2 <- length(y)
+N <- n1 + n2
+```
+
+# Ranksum
+
+## In-Built
+```{r}
+alternative <- "two.sided" # "greater", "less", "two.sided"
+wilcox.test(x, y, alternative = alternative)
+```
+
+## Long Hand Calculations
+
+```{r}
+# H0 : xbar  = ybar
+# HA : xbar != ybar
+
+supergroup <- c(x, y)
+supergroup_ranks <- rank(supergroup, ties.method = "average")
+
+x_ranks <- supergroup_ranks[1:n1]
+y_ranks <- supergroup_ranks[n1 + 1:N]
+
+# test statistic, W
+W <- sum(x_ranks)
+
+mu_W  <- (n1 * (N + 1)) / 2
+sig_W <- sqrt((n1 * n2 * (N + 1)) / 12)
+
+zobs <- (W - mu_W) / sig_W
+
+# look up p-value for Ha: mu1 \neq u2 (two-sided)
+p_val <- 2 * pnorm(abs(zobs), lower.tail = FALSE)
+p_val
+```

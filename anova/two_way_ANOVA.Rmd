@@ -1,0 +1,102 @@
+---
+title: "One Way ANOVA"
+date: "`03-14-2023`"
+output:
+  html_document:
+    theme: default
+    highlight: textmate
+    toc: yes
+    toc_float: yes
+    fig_width: 9.67
+    fig_height: 6
+    fig_caption: yes
+  pdf_document:
+    toc: yes
+---
+
+# Two-way ANOVA
+ANOVA test is used to compare multiple samples and derive inferences about their respective populations
+
+# Assumptions
+- Population variances are equal
+- Populations are normal
+
+# Important Note
+To clear the workspace, use the command below:
+```{r}
+rm(list = ls())
+```
+
+# Summary Statistics
+
+```{r}
+I <- 4
+J <- 3
+K <- 2
+
+data <- c(
+            # b_1         #b_2          #b_3
+            876, 913,     1413, 1290,   1291, 1412, #a_1
+            1156, 1219,   1876, 1710,   2115, 1963, #a_2
+            1234, 1181,   1591, 1649,   1650, 1712, #a_3
+            825, 797,     1083, 1161,   1148, 1262  #a_4
+            )
+
+factor_a <- factor(
+        c(
+            1, 1, 1, 1, 1, 1,
+            2, 2, 2, 2, 2, 2,
+            3, 3, 3, 3, 3, 3,
+            4, 4, 4, 4, 4, 4
+            ))
+factor_b <- factor(
+        c(
+            1, 1, 2, 2, 3, 3,
+            1, 1, 2, 2, 3, 3,
+            1, 1, 2, 2, 3, 3,
+            1, 1, 2, 2, 3, 3
+            ))
+```
+
+
+
+# Built-in ANOVA in R
+
+## With Interaction
+
+```{r}
+# run 2-Way ANOVA with interaction
+anova_with_interaction <- aov(data ~ factor_a * factor_b)
+summary(anova_with_interaction)
+```
+## Without Interaction
+
+```{r}
+# run 2-Way ANOVA without interaction
+anova_without_interaction <- aov(data ~ factor_a + factor_b)
+summary(anova_without_interaction)
+```
+
+# Long Hand ANOVA Calculations
+
+```{r}
+# Sums of Squares
+
+```
+
+# Hypothesis Testing
+```{r}
+
+# Null hypothesis      : mu_1 = mu_2 = ... = mu_n
+# Alternate hypothesis : at least one of group means are different
+
+# Test Statistic
+
+# look up P-value (verify with table)
+
+```
+
+# Data Scatter plot
+```{r}
+
+```
