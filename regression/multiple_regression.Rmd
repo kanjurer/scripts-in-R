@@ -1,0 +1,50 @@
+---
+title: "Multiple Linear Regression"
+date: "`09-28-2024"
+output:
+  html_document:
+    theme: default
+    highlight: textmate
+    toc: yes
+    toc_float: yes
+    fig_width: 9.67
+    fig_height: 6
+    fig_caption: yes
+  pdf_document:
+    toc: yes
+---
+
+
+# Important Note
+To clear the workspace, use the command below:
+```{r}
+rm(list = ls())
+```
+
+# Data
+
+```{r}
+M <- 10 # attributes B_0, B_1, ..., B_M
+N <- 100 # data points
+error_sd <- 10
+
+error <- rnorm(N, mean = 0, sd = error_sd)
+beta_real <- 1:(M+1)
+x <-  cbind(1, matrix(rnorm(M * N, mean=69, sd=71), ncol=M, nrow=N, byrow=TRUE))
+y <- x %*% beta_real + error
+```
+
+# Multiple Linear Regression
+```{r}
+lm_model <- lm(y ~ x)
+summary(lm_model)
+```
+
+## Hand Calculations
+
+```{r}
+xT <- t(x)
+
+beta_estimated <- solve(xT %*% x) %*% xT %*% y
+print(beta_estimated)
+```

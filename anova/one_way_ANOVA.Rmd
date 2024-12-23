@@ -15,14 +15,18 @@ output:
 ---
 
 # One-way ANOVA
+
 ANOVA test is used to compare multiple samples and derive inferences about their respective populations
 
 # Assumptions
-- Population variances are equal
-- Populations are normal
+
+-   Population variances are equal
+-   Populations are normal
 
 # Important Note
+
 To clear the workspace, use the command below:
+
 ```{r}
 rm(list = ls())
 ```
@@ -63,8 +67,6 @@ grand_sd <- sd(supergroup)
 a <- length(group_datas)
 N <- sum(group_sizes)
 ```
-
-
 
 # Built-in ANOVA in R
 
@@ -109,6 +111,7 @@ print(MSE)
 ```
 
 # Hypothesis Testing
+
 ```{r}
 
 # Null hypothesis      : mu_1 = mu_2 = ... = mu_n
@@ -124,6 +127,7 @@ print(pvalue)
 ```
 
 # Data Scatter plot
+
 ```{r}
 plot(group, x, pch=19, cex=1.5, main="data scatter plot", ylab="response", xaxt='n')
 axis(1, at = ranks, labels = c("A", "B", "C"))
